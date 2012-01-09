@@ -39,30 +39,33 @@ var drawAll = function (/* time */ time) {
 	}
 
 
-	_(screens).each(function (x) {
+	_(gamescreens).each(function (x) {
 		x.draw(time);
 	});
 	window.requestAnimFrame(drawAll);
 };
 
-var viewports = [];
+var gamescreens = [];
 $(function () {
 	var gen = function () {
-		_(viewports).each(function (viewport){
-			viewport.remove();
+		_(gamescreens).each(function (gamescreen){
+			gamescreen.remove();
 		});
 
-		var _new_viewports = [
-			new gamescreen.create($("#gamearea1"), gamescreen.screens.scrollingCanvas, gamescreen.world(WORLD), [200,-200], SCREEN_WIDTH, SCREEN_HEIGHT, background)
-			//new gamescreen.create($("#gamearea2"), gamescreen.screens.fullCanvas, gamescreen.world(WORLD), [200,-200], SCREEN_WIDTH, SCREEN_HEIGHT, background)
-			//new gamescreen.create($("#gamearea3"), gamescreen.screens.backingCanvas, gamescreen.world(WORLD), [200,-200], SCREEN_WIDTH, SCREEN_HEIGHT, background)
-			], screen;
-		viewports = _new_viewports;
+		var _new_gamescreens = [
+			gamescreen.create($("#gamearea1"),[SCREEN_WIDTH, SCREEN_HEIGHT],gamescreen.world(WORLD),animate(polygons), background)
+			//new gamescreen.create($("#gamearea1"), gamescreen.screens.scrollingCanvas, gamescreen.world(WORLD), [200,-200], SCREEN_WIDTH, SCREEN_HEIGHT, background)
+			];
+		
+		gamescreens = _new_gamescreens;
+		_(gamescreens).each(function (gs) {
+			gs.center(200,-200);
+		});
 
 		//viewport.size(SCREEN);
-		screens = _(viewports).map(function (viewport) {
-			return gamescreen.createView(viewport, SCREEN_WIDTH, SCREEN_HEIGHT, animate(polygons));
-		});
+		//screens = _(viewports).map(function (viewport) {
+		//	return gamescreen.createView(viewport, SCREEN_WIDTH, SCREEN_HEIGHT, animate(polygons));
+		//});
 	};
 	
 	var load = function (file) {

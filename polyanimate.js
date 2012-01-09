@@ -53,27 +53,26 @@ var jitterPolygons = function (polygons, distance) {
 };
 
 var createDrawer = function (polygons) {
-		
-	return function (screen, elapsed) {
-		var draw = function (c2s, ctx) {
-			var canvas = ctx.canvas;
+	return function (screen, c2s, ctx) {
+		var canvas = ctx.canvas;
 
-			var drawPolygon = function (polygon) {
-				ctx.fillStyle = "rgba(" + polygon.color[0] + "," + polygon.color[1] + "," + polygon.color[2] + "," + polygon.color[3] + ")";
-				//ctx.strokeStyle = "#00ff00";
-				ctx.beginPath();
-				ctx.globalCompositeOperation = compositeTypes[currentComposite];
-				ctx.moveTo(c2s.cartesian2screenx(polygon.points[0][0]), c2s.cartesian2screeny(polygon.points[0][1]));
-				//console.log("First point: " + polygon.points[0][0] + "," + polygon.points[0][1]);
-				for (var j = 1; j < polygon.points.length; j++) {
-					ctx.lineTo(c2s.cartesian2screenx(polygon.points[j][0]), c2s.cartesian2screeny(polygon.points[j][1]));
-				}
-				ctx.lineTo(c2s.cartesian2screenx(polygon.points[0][0]), c2s.cartesian2screeny(polygon.points[0][1]));
-				ctx.closePath();
-				//ctx.stroke();
-				ctx.fill();
-			};
+		var drawPolygon = function (polygon) {
+			ctx.fillStyle = "rgba(" + polygon.color[0] + "," + polygon.color[1] + "," + polygon.color[2] + "," + polygon.color[3] + ")";
+			//ctx.strokeStyle = "#00ff00";
+			ctx.beginPath();
+			ctx.globalCompositeOperation = compositeTypes[currentComposite];
+			ctx.moveTo(c2s.cartesian2screenx(polygon.points[0][0]), c2s.cartesian2screeny(polygon.points[0][1]));
+			//console.log("First point: " + polygon.points[0][0] + "," + polygon.points[0][1]);
+			for (var j = 1; j < polygon.points.length; j++) {
+				ctx.lineTo(c2s.cartesian2screenx(polygon.points[j][0]), c2s.cartesian2screeny(polygon.points[j][1]));
+			}
+			ctx.lineTo(c2s.cartesian2screenx(polygon.points[0][0]), c2s.cartesian2screeny(polygon.points[0][1]));
+			ctx.closePath();
+			//ctx.stroke();
+			ctx.fill();
+		};
 
+		if (isDrawing) {
 			if (drawPolygonsFlag && polygons.length > 0) {
 				for (var k = 0; k < drawing.length; k++) {
 					drawPolygon(polygons[drawing[k]]);
@@ -83,15 +82,11 @@ var createDrawer = function (polygons) {
 			if (grid) {
 				gamescreen.util.grid(ctx, "rgb(30,30,30)", c2s, -WORLD, -WORLD, WORLD, WORLD, GRIDSIZE);
 			}
-
-		};
-
-		if (isDrawing) {
-			screen.draw(draw);
 		} else {
 			screen.console.frame_log("Paused");
 		}
 	};
+
 };
 
 var animate = function (polygons) {
