@@ -54,7 +54,7 @@ var jitterPolygons = function (polygons, distance) {
 
 var createDrawer = function (polygons) {
 		
-	return function (screen, drawing, isDrawing, elapsed) {
+	return function (screen, elapsed) {
 		var draw = function (c2s, ctx) {
 			var canvas = ctx.canvas;
 
@@ -89,7 +89,7 @@ var createDrawer = function (polygons) {
 		if (isDrawing) {
 			screen.draw(draw);
 		} else {
-			screen.console("Paused");
+			screen.console.frame_log("Paused");
 		}
 	};
 };
